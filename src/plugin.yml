@@ -1,0 +1,8 @@
+name: MobCount
+main: net.raidstone.Count
+version: 1.0
+
+commands:
+  countmobs:
+    usage: /countmob <radius>
+    description: Counts mobs in a defined radius

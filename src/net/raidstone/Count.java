@@ -24,9 +24,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Set;
 
 public class Count extends JavaPlugin implements Listener
 {
@@ -53,6 +59,9 @@ public class Count extends JavaPlugin implements Listener
                 sender.sendMessage("Please use it as a player.");
                 return true;
             }
+
+            HashMap<EntityType, Set<Entity>> entities = new HashMap<EntityType, Set<Entity>>();
+
             Player player = (Player) sender;
             int radius = 50;
             if(args.length<2)
@@ -60,9 +69,23 @@ public class Count extends JavaPlugin implements Listener
                 player.sendMessage("No radius defined, assuming "+radius+" (squared).");
             }
             int squared=radius*radius;
-            player.getNearbyEntities(squared,128,squared);
+            for(Entity entity : player.getNearbyEntities(squared,128,squared))
+            {
+                EntityType type = entity.getType();
+                entities.putIfAbsent(type, Collections.<Entity>emptySet());
 
+                Set<Entity> entityset = entities.get(type);
+                entityset.add(entity);
+                entities.put(type, entityset);
+            }
 
+            player.sendMessage("Analyzing entities. Here are the types with the amount of naturally spawned entities.");
+            for(EntityType type : entities.keySet())
+            {
+                Set<Entity> entityset = entities.get(type);
+                int count = entityset.size();
+                player.sendMessage(type.toString()+": "+count);
+            }
         }
         return true;
     }

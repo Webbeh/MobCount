@@ -30,8 +30,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Count extends JavaPlugin implements Listener
@@ -64,15 +64,19 @@ public class Count extends JavaPlugin implements Listener
 
             Player player = (Player) sender;
             int radius = 50;
-            if(args.length<2)
+            if(args.length<1)
             {
                 player.sendMessage("No radius defined, assuming "+radius+" (squared).");
+            }
+            else
+            {
+                radius = Integer.valueOf(args[0]);
             }
             int squared=radius*radius;
             for(Entity entity : player.getNearbyEntities(squared,128,squared))
             {
                 EntityType type = entity.getType();
-                entities.putIfAbsent(type, Collections.<Entity>emptySet());
+                entities.putIfAbsent(type, new HashSet<Entity>());
 
                 Set<Entity> entityset = entities.get(type);
                 entityset.add(entity);

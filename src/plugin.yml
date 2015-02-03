@@ -6,3 +6,6 @@ commands:
   countmobs:
     usage: /countmob <radius>
     description: Counts mobs in a defined radius
+  entityremove:
+    usage: /entityremove <type> [radius]
+    description: Removes entities

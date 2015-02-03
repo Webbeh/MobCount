@@ -73,7 +73,7 @@ public class Count extends JavaPlugin implements Listener
                 radius = Integer.valueOf(args[0]);
             }
             int squared=radius*radius;
-            for(Entity entity : player.getNearbyEntities(squared,128,squared))
+            for(Entity entity : player.getNearbyEntities(squared,256,squared))
             {
                 EntityType type = entity.getType();
                 entities.putIfAbsent(type, new HashSet<Entity>());
@@ -89,6 +89,53 @@ public class Count extends JavaPlugin implements Listener
                 Set<Entity> entityset = entities.get(type);
                 int count = entityset.size();
                 player.sendMessage(type.toString()+": "+count);
+            }
+        }
+        else if (cmd.getName().equalsIgnoreCase("entityremove"))
+        {
+            if(!sender.hasPermission("raidstone.entityremove"))
+            {
+                sender.sendMessage(ChatColor.RED+"No.");
+                return true;
+            }
+
+            if(sender instanceof ConsoleCommandSender)
+            {
+                sender.sendMessage("Can't use in console.");
+                return true;
+            }
+
+            Player p = (Player) sender;
+            if(args.length<1)
+            {
+                p.sendMessage("Give us a type.");
+                return true;
+            }
+
+            String t = args[0];
+            try
+            {
+                int radius=50;
+                if(args.length==2)
+                {
+                    radius=Integer.valueOf(args[1]);
+                }
+                int squared=radius*radius;
+                int counter=0;
+
+                for( Entity e : p.getNearbyEntities(squared, 256, squared))
+                {
+                    if(e.getType().name().equalsIgnoreCase(t))
+                    {
+                        counter++;
+                        e.remove();
+                    }
+                }
+                p.sendMessage("Removed "+counter+" entities of type "+t);
+            }
+            catch (Exception e)
+            {
+                p.sendMessage("Entity type not recognized.");
             }
         }
         return true;

@@ -17,7 +17,7 @@
  * Any proven infringement of this license will have the author reported to the Swiss Federal Authorities.
  */
 
-package net.raidstone;
+package net.raidstone.core;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

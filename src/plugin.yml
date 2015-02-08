@@ -1,5 +1,5 @@
 name: MobCount
-main: Count
+main: net.raidstone.core.Count
 version: 1.0
 
 commands:
